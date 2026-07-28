@@ -1,4 +1,5 @@
 using Clinic.Application.DTOs.Patients;
+using Clinic.Application.Common.Localization;
 using FluentValidation;
 
 namespace Clinic.Application.Validators.Patients;
@@ -9,19 +10,19 @@ public class UpdatePatientRequestValidator : AbstractValidator<UpdatePatientRequ
     public UpdatePatientRequestValidator()
     {
         RuleFor(x => x.FirstName)
-            .NotEmpty().WithMessage("First name is required.")
-            .MaximumLength(50).WithMessage("First name cannot exceed 50 characters.");
+            .NotEmpty().WithMessage(AppText.FirstNameRequired)
+            .MaximumLength(50).WithMessage(AppText.FirstNameMaxLength);
 
         RuleFor(x => x.LastName)
-            .NotEmpty().WithMessage("Last name is required.")
-            .MaximumLength(50).WithMessage("Last name cannot exceed 50 characters.");
+            .NotEmpty().WithMessage(AppText.LastNameRequired)
+            .MaximumLength(50).WithMessage(AppText.LastNameMaxLength);
 
         RuleFor(x => x.Phone)
-            .NotEmpty().WithMessage("Phone number is required.")
-            .Matches(@"^\+?\d{10,15}$").WithMessage("Phone number must be valid and contain 10 to 15 digits.");
+            .NotEmpty().WithMessage(AppText.PhoneRequired)
+            .Matches(@"^\+?\d{10,15}$").WithMessage(AppText.PhoneValidLength);
 
         RuleFor(x => x.DateOfBirth)
-            .LessThan(DateTime.Now).WithMessage("Date of birth must be in the past.");
+            .LessThan(DateTime.Now).WithMessage(AppText.DateOfBirthPast);
     }
     
 }

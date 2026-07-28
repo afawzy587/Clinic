@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Clinic.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
 using Clinic.Application.Interfaces;
 using Clinic.Application.DTOs.Patients;
 using Clinic.Application.DTOs.Common;
 using FluentValidation;
-using Clinic.Application.Common;
+using Clinic.Application.Common.Localization;
 
 namespace Clinic.API.Controllers;
 
@@ -54,11 +52,11 @@ public class PatientsController : BaseApiController
         var patient = await _patientService.GetByIdAsync(id, cancellationToken);
         if (patient == null)
         {
-            return NotFound();
+            return NotFoundResponse(AppText.PatientWithIdNotFound(id));
         }
         return OkResponse(
         patient,
-        "Patient retrieved successfully.");
+        AppText.PatientRetrievedSuccessfully);
     }
 
     [HttpPost]
@@ -74,10 +72,7 @@ public class PatientsController : BaseApiController
 
         if (!validationResult.IsValid)
         {
-
-            return ValidationErrorResponse(
-                 validationResult.ToDictionary()
-            );
+            return ValidationErrorResponse(validationResult.ToDictionary());
         }
         
         var patientResponse = await _patientService.CreateAsync(request, cancellationToken);
@@ -98,29 +93,17 @@ public class PatientsController : BaseApiController
         var validationResult = await _updateValidator.ValidateAsync(request,cancellationToken);
          if (!validationResult.IsValid)
         {
-            return BadRequest(
-                new
+            return ValidationErrorResponse(
+                validationResult.Errors.Select(error => new
                 {
-                    success = false,
-                    message = "Validation failed.",
-                    errors = validationResult
-                        .Errors
-                        .Select(error => new
-                        {
-                            field = error.PropertyName,
-                            message = error.ErrorMessage
-                        })
-                });
+                    field = error.PropertyName,
+                    message = error.ErrorMessage
+                }));
         }
         var updated = await _patientService.UpdateAsync(id, request, cancellationToken);
            if (!updated)
             {
-                return NotFound(
-                    new
-                    {
-                        success = false,
-                        message = $"Patient with ID {id} was not found."
-                    });
+                return NotFoundResponse(AppText.PatientWithIdNotFound(id));
             }
         return NoContent();
     }
@@ -137,7 +120,7 @@ public class PatientsController : BaseApiController
 
         if (!deleted)
         {
-            return NotFound();
+            return NotFoundResponse(AppText.PatientWithIdNotFound(id));
         }
 
         return NoContent();

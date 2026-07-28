@@ -1,6 +1,7 @@
 
 using Clinic.Application.Common.Responces;
 using Clinic.Application.Common.Responses;
+using Clinic.Application.Common.Localization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic.API.Controllers;
@@ -34,8 +35,10 @@ public abstract class BaseApiController : ControllerBase
 
     protected IActionResult CreatedResponse<T>(
         T data,
-        string? message = "Created Successfully")
+        string? message = null)
     {
+        message ??= AppText.CreatedSuccessfully;
+
         return StatusCode(
             StatusCodes.Status201Created,
             new ApiResponse<T>
@@ -47,8 +50,10 @@ public abstract class BaseApiController : ControllerBase
     }
 
     protected IActionResult UpdatedResponse(
-        string message = "Updated Successfully")
+        string? message = null)
     {
+        message ??= AppText.UpdatedSuccessfully;
+
         return Ok(
             new ApiResponse<object>
             {
@@ -58,8 +63,10 @@ public abstract class BaseApiController : ControllerBase
     }
 
     protected IActionResult DeletedResponse(
-        string message = "Deleted Successfully")
+        string? message = null)
     {
+        message ??= AppText.DeletedSuccessfully;
+
         return Ok(
             new ApiResponse<object>
             {
@@ -70,8 +77,10 @@ public abstract class BaseApiController : ControllerBase
 
     protected IActionResult BadRequestResponse(
         object? errors = null,
-        string message = "Bad Request")
+        string? message = null)
     {
+        message ??= AppText.BadRequest;
+
         return BadRequest(
             new ApiErrorResponse
             {
@@ -82,8 +91,10 @@ public abstract class BaseApiController : ControllerBase
     }
 
     protected IActionResult NotFoundResponse(
-        string message = "Not Found")
+        string? message = null)
     {
+        message ??= AppText.NotFound;
+
         return NotFound(
             new ApiErrorResponse
             {
@@ -93,8 +104,10 @@ public abstract class BaseApiController : ControllerBase
     }
 
     protected IActionResult UnauthorizedResponse(
-        string message = "Unauthenticated")
+        string? message = null)
     {
+        message ??= AppText.Unauthenticated;
+
         return Unauthorized(
             new ApiErrorResponse
             {
@@ -104,8 +117,10 @@ public abstract class BaseApiController : ControllerBase
     }
 
     protected IActionResult ForbiddenResponse(
-        string message = "Unauthorized")
+        string? message = null)
     {
+        message ??= AppText.Unauthorized;
+
         return StatusCode(
             StatusCodes.Status403Forbidden,
             new ApiErrorResponse
@@ -116,8 +131,10 @@ public abstract class BaseApiController : ControllerBase
     }
 
     protected IActionResult InternalErrorResponse(
-        string message = "Internal Server Error")
+        string? message = null)
     {
+        message ??= AppText.InternalServerError;
+
         return StatusCode(
             StatusCodes.Status500InternalServerError,
             new ApiErrorResponse
@@ -133,7 +150,7 @@ public abstract class BaseApiController : ControllerBase
         return BadRequest(
             new ApiErrorResponse
             {
-                Message = "Validation failed.",
+                Message = AppText.ValidationFailed,
                 Code = 400,
                 Errors = errors
             });

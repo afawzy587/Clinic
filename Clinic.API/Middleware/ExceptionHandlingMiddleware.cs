@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using Clinic.Application.Common.Localization;
 
 namespace Clinic.API.Middleware;
 
@@ -38,7 +39,7 @@ public class ExceptionHandlingMiddleware
             var response = new
             {
                 success = false,
-                message = "An unexpected error occurred."
+                message = AppText.UnexpectedError
             };
 
             await context.Response.WriteAsync(

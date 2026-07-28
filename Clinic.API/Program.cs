@@ -43,12 +43,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<RequestCultureMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.MapControllers();
-
-// Middleware for exception handling
-app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseExceptionHandler();
 
