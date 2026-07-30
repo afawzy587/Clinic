@@ -23,5 +23,11 @@ public interface IPatientRepository
 
     Task DeleteAsync(int id, CancellationToken cancellationToken);
 
+    Task<bool> ExistsByNameAsync(
+    string firstName,
+    string lastName,
+    int? excludeId,
+    CancellationToken cancellationToken);
 
+    
 }

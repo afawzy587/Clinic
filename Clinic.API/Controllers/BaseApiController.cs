@@ -29,7 +29,7 @@ public abstract class BaseApiController : ControllerBase
             new ApiResponse<object>
             {
                 Success = true,
-                Message = message
+                Message = message 
             });
     }
 
@@ -37,41 +37,33 @@ public abstract class BaseApiController : ControllerBase
         T data,
         string? message = null)
     {
-        message ??= AppText.CreatedSuccessfully;
-
         return StatusCode(
             StatusCodes.Status201Created,
             new ApiResponse<T>
             {
                 Success = true,
-                Message = message,
+                Message = message ?? AppText.CreatedSuccessfully,
                 Data = data
             });
     }
 
-    protected IActionResult UpdatedResponse(
-        string? message = null)
-    {
-        message ??= AppText.UpdatedSuccessfully;
-
+    protected IActionResult UpdatedResponse( string? message = null){
         return Ok(
             new ApiResponse<object>
             {
                 Success = true,
-                Message = message
+                Message = message ?? AppText.UpdatedSuccessfully
             });
     }
 
     protected IActionResult DeletedResponse(
         string? message = null)
     {
-        message ??= AppText.DeletedSuccessfully;
-
         return Ok(
             new ApiResponse<object>
             {
                 Success = true,
-                Message = message
+                Message = message ?? AppText.DeletedSuccessfully
             });
     }
 
@@ -79,13 +71,30 @@ public abstract class BaseApiController : ControllerBase
         object? errors = null,
         string? message = null)
     {
-        message ??= AppText.BadRequest;
+        return BadRequest(
+            new ApiErrorResponse
+            {
+                Success = false,
+                Message = message ?? AppText.BadRequest,
+                Code = StatusCodes.Status400BadRequest,
+                Errors = errors
+            });
+    }
+
+    protected IActionResult ValidationErrorResponse(
+        IDictionary<string, string[]> errors)
+    {
+        var firstMessage = errors
+            .SelectMany(x => x.Value)
+            .FirstOrDefault()
+            ?? AppText.ValidationFailed;
 
         return BadRequest(
             new ApiErrorResponse
             {
-                Message = message,
-                Code = 400,
+                Success = false,
+                Message = firstMessage,
+                Code = StatusCodes.Status400BadRequest,
                 Errors = errors
             });
     }
@@ -98,61 +107,43 @@ public abstract class BaseApiController : ControllerBase
         return NotFound(
             new ApiErrorResponse
             {
+                Success = false,
                 Message = message,
-                Code = 404
+                Code = StatusCodes.Status404NotFound
             });
     }
 
-    protected IActionResult UnauthorizedResponse(
-        string? message = null)
-    {
-        message ??= AppText.Unauthenticated;
-
+    protected IActionResult UnauthorizedResponse(string? message = null){
+        message ??= AppText.Unauthorized;
         return Unauthorized(
             new ApiErrorResponse
             {
+                Success = false,
                 Message = message,
-                Code = 401
+                Code = StatusCodes.Status401Unauthorized
             });
     }
 
-    protected IActionResult ForbiddenResponse(
-        string? message = null)
-    {
-        message ??= AppText.Unauthorized;
-
+    protected IActionResult ForbiddenResponse(string? message = null){
         return StatusCode(
             StatusCodes.Status403Forbidden,
             new ApiErrorResponse
             {
-                Message = message,
-                Code = 401
+                Success = false,
+                Message = message ?? AppText.Unauthenticated,
+                Code = StatusCodes.Status403Forbidden
             });
     }
 
     protected IActionResult InternalErrorResponse(
-        string? message = null)
-    {
-        message ??= AppText.InternalServerError;
-
+        string? message = null){
         return StatusCode(
             StatusCodes.Status500InternalServerError,
             new ApiErrorResponse
             {
-                Message = message,
-                Code = 500
-            });
-    }
-
-    protected IActionResult ValidationErrorResponse(
-        object errors)
-    {
-        return BadRequest(
-            new ApiErrorResponse
-            {
-                Message = AppText.ValidationFailed,
-                Code = 400,
-                Errors = errors
+                Success = false,
+                Message = message ?? AppText.InternalServerError,
+                Code = StatusCodes.Status500InternalServerError
             });
     }
 }

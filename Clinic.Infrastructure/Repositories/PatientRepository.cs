@@ -107,4 +107,21 @@ public class PatientRepository : IPatientRepository
         throw new NotImplementedException();
     }
 
+    public async Task<bool> ExistsByNameAsync(
+    string firstName,
+    string lastName,
+    int? excludeId,
+    CancellationToken cancellationToken)
+    {
+        return await _dbContext.Patients
+            .AsNoTracking()
+            .AnyAsync(
+                x =>
+                    x.FirstName == firstName &&
+                    x.LastName == lastName &&
+                    (!excludeId.HasValue ||
+                    x.Id != excludeId.Value),
+                cancellationToken);
+    }
+
 }

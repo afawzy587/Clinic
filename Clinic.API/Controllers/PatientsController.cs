@@ -93,19 +93,14 @@ public class PatientsController : BaseApiController
         var validationResult = await _updateValidator.ValidateAsync(request,cancellationToken);
          if (!validationResult.IsValid)
         {
-            return ValidationErrorResponse(
-                validationResult.Errors.Select(error => new
-                {
-                    field = error.PropertyName,
-                    message = error.ErrorMessage
-                }));
+            return ValidationErrorResponse(validationResult.ToDictionary());
         }
         var updated = await _patientService.UpdateAsync(id, request, cancellationToken);
            if (!updated)
             {
                 return NotFoundResponse(AppText.PatientWithIdNotFound(id));
             }
-        return NoContent();
+        return UpdatedResponse();
     }
 
     [HttpDelete("{id:int}")]

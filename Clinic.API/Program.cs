@@ -1,39 +1,23 @@
 using Clinic.API.Middleware;
-using Clinic.Application.Interfaces;
-using Clinic.Application.Services;
-using Clinic.Infrastructure.Persistence;
-using Clinic.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
-using FluentValidation;
-using Clinic.Application.Validators.Patients;
+using Clinic.Application;
+using Clinic.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddValidatorsFromAssemblyContaining<
-    CreatePatientRequestValidator
-    >();
-    
+// Application Layer
+builder.Services.AddApplication();
+
+// Infrastructure Layer
+builder.Services.AddInfrastructure( builder.Configuration);
+
+// API
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<ClinicDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString(
-            "DefaultConnection"
-        )
-    )
-);
-
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddProblemDetails();
-
-// Add services to the container.
-
-builder.Services.AddScoped<IPatientService, PatientService>();
-builder.Services.AddScoped<IPatientRepository, PatientRepository>();
-
-// Configure the HTTP request pipeline.
-
 
 var app = builder.Build();
 
@@ -43,14 +27,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<RequestCultureMiddleware>();
-app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
+app.AllMiddleware();
+
 app.MapControllers();
 
-app.UseExceptionHandler();
-
 app.Run();
-

@@ -26,7 +26,8 @@ public static class AppText
             ["PhoneRequired"] = ("Phone number is required.", "\u0631\u0642\u0645 \u0627\u0644\u0647\u0627\u062A\u0641 \u0645\u0637\u0644\u0648\u0628."),
             ["PhoneValid"] = ("Phone number must be valid.", "\u064A\u062C\u0628 \u0623\u0646 \u064A\u0643\u0648\u0646 \u0631\u0642\u0645 \u0627\u0644\u0647\u0627\u062A\u0641 \u0635\u0627\u0644\u062D\u064B\u0627."),
             ["PhoneValidLength"] = ("Phone number must be valid and contain 10 to 15 digits.", "\u064A\u062C\u0628 \u0623\u0646 \u064A\u0643\u0648\u0646 \u0631\u0642\u0645 \u0627\u0644\u0647\u0627\u062A\u0641 \u0635\u0627\u0644\u062D\u064B\u0627 \u0648\u064A\u062A\u0643\u0648\u0646 \u0645\u0646 10 \u0625\u0644\u0649 15 \u0631\u0642\u0645\u064B\u0627."),
-            ["DateOfBirthPast"] = ("Date of birth must be in the past.", "\u064A\u062C\u0628 \u0623\u0646 \u064A\u0643\u0648\u0646 \u062A\u0627\u0631\u064A\u062E \u0627\u0644\u0645\u064A\u0644\u0627\u062F \u0641\u064A \u0627\u0644\u0645\u0627\u0636\u064A.")
+            ["DateOfBirthPast"] = ("Date of birth must be in the past.", "\u064A\u062C\u0628 \u0623\u0646 \u064A\u0643\u0648\u0646 \u062A\u0627\u0631\u064A\u062E \u0627\u0644\u0645\u064A\u0644\u0627\u062F \u0641\u064A \u0627\u0644\u0645\u0627\u0636\u064A."),
+            ["NameAlreadyExists"] = ("Name already exists","هذا الاسم مسجل بالفعل"),
         };
 
     private static bool IsArabic =>
@@ -63,6 +64,7 @@ public static class AppText
     public static string LastNameRequired => Get("LastNameRequired");
 
     public static string LastNameMaxLength => Get("LastNameMaxLength");
+    public static string NameAlreadyExists => Get("NameAlreadyExists");
 
     public static string PhoneRequired => Get("PhoneRequired");
 
