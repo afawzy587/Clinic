@@ -12,12 +12,20 @@ public class UpdatePatientRequestValidator : AbstractValidator<UpdatePatientRequ
     {
         _patientRepository = patientRepository;
         RuleFor(x => x.FirstName)
-            .NotEmpty().WithMessage(AppText.FirstNameRequired)
+            .Matches(@"^(?=(?:.*[a-zA-Z]){3})[a-zA-Z0-9\s@]+$")
+            // .WithMessage(AppText.FirstNameInvalid)
+            .NotEmpty()
+            // .WithMessage(AppText.FirstNameRequired)
             .MinimumLength(3)
-            .MaximumLength(50).WithMessage(AppText.FirstNameMaxLength);
+            .MaximumLength(50).WithMessage(AppText.FirstNameMaxLength)
+            .WithName(AppText.FirstName)
+            ;
 
         RuleFor(x => x.LastName)
+            .Matches(@"^(?=(?:.*[a-zA-Z]){3})[a-zA-Z0-9\s@]+$")
+            .WithMessage(AppText.LastNameInvalid)
             .NotEmpty().WithMessage(AppText.LastNameRequired)
+            .MinimumLength(3).WithMessage(AppText.LastNameMaxLength)
             .MaximumLength(50).WithMessage(AppText.LastNameMaxLength);
 
         RuleFor(x => x.Phone)

@@ -1,5 +1,7 @@
 using Clinic.Application.DTOs.Common;
+using Clinic.Application.DTOs.Patients;
 using Clinic.Application.Interfaces;
+using Clinic.Application.Specifications;
 using Clinic.Domain.Entities;
 using Clinic.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -18,22 +20,16 @@ public class PatientRepository : IPatientRepository
     }
 
    public async Task<(List<Patient> items, int TotalCount)> GetPagedAsync(
-        PaginationRequest request, 
+        PatientFilterRequest request, 
         CancellationToken cancellationToken)
     {
         var query = _dbContext.Patients
             .AsNoTracking()
             .Where(x => x.IsActive);
 
-        if (!string.IsNullOrWhiteSpace(request.Search))
-        {
-            var search = request.Search.Trim();
+        var specification = new PatientSpecification();
 
-            query = query.Where(x =>
-                x.FirstName.Contains(search) ||
-                x.LastName.Contains(search) ||
-                x.Phone.Contains(search));
-        }
+        query = specification.Apply(query,request);
 
         var totalCount = await query.CountAsync(
             cancellationToken);

@@ -1,4 +1,4 @@
-using Clinic.Application.DTOs.Common;
+using Clinic.Application.DTOs.Patients;
 using Clinic.Domain.Entities;
 
 namespace Clinic.Application.Interfaces;
@@ -8,7 +8,7 @@ public interface IPatientRepository
     Task<List<Patient>> GetAllAsync(
         CancellationToken cancellationToken);
     Task<(List<Patient> items, int TotalCount)> GetPagedAsync(
-        PaginationRequest request, 
+        PatientFilterRequest request, 
         CancellationToken cancellationToken);
 
     Task<Patient?> GetByIdAsync(

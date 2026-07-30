@@ -30,7 +30,7 @@ public class PatientsController : BaseApiController
 
     [HttpGet]
         public async Task<IActionResult> GetAll(
-            [FromQuery] PaginationRequest request,
+            [FromQuery] PatientFilterRequest request,
             CancellationToken cancellationToken
         )
         {

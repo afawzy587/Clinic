@@ -17,7 +17,7 @@ public class PatientService : IPatientService
     }
 
     public async Task<PagedResponse<PatientResponse>> GetPagedAsync(
-        PaginationRequest request,
+        PatientFilterRequest request,
         CancellationToken cancellationToken)
     {
         var (patients, totalCount) = await _patientRepository.GetPagedAsync(request, cancellationToken);

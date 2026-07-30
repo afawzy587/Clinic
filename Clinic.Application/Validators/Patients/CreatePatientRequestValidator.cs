@@ -14,12 +14,16 @@ public class CreatePatientRequestValidator :AbstractValidator<CreatePatientReque
         _patientRepository = patientRepository; 
 
         RuleFor(x => x.FirstName)
-            .NotEmpty().WithMessage(AppText.FirstNameRequired)
-            .MaximumLength(50).WithMessage(AppText.FirstNameMaxLength);
+            .Matches(@"^(?=(?:.*[a-zA-Z]){3})[a-zA-Z0-9\s@]+$")
+            .NotEmpty()
+            .MinimumLength(3).MaximumLength(50)
+            .WithName(AppText.FirstName);
 
         RuleFor(x => x.LastName)
+            .Matches(@"^(?=(?:.*[a-zA-Z]){3})[a-zA-Z0-9\s@]+$")
+            .WithMessage(AppText.LastNameInvalid)
             .NotEmpty().WithMessage(AppText.LastNameRequired)
-            .MaximumLength(50).WithMessage(AppText.LastNameMaxLength);
+            .MinimumLength(3).MaximumLength(50).WithMessage(AppText.LastNameMaxLength);
 
          RuleFor(x => x)
             .MustAsync(BeUniqueName)

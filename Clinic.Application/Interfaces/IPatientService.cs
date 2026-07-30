@@ -7,7 +7,7 @@ namespace Clinic.Application.Interfaces;
 public interface IPatientService
 {
     Task<PagedResponse<PatientResponse>> GetPagedAsync(
-    PaginationRequest request,
+    PatientFilterRequest request,
     CancellationToken cancellationToken);
     Task<List<Patient>> GetAllAsync(CancellationToken cancellationToken);
 
